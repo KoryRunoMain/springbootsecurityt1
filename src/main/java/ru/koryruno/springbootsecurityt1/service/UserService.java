@@ -10,8 +10,10 @@ import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -19,13 +21,13 @@ public class UserService {
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new NotFoundException("user not found, username: " + username));
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(String.format("User with username: '%s' not found", username)));
     }
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("user not found, userId: " + userId));
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: '%s' not found", userId)));
     }
 
 }
