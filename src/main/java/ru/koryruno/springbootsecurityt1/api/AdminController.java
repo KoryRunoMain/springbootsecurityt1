@@ -19,7 +19,7 @@ public class AdminController {
     private final UserService userService;
 
     @GetMapping(path = "/{userId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public User getUser(@PathVariable Long userId) {
         return userService.getUserById(userId);

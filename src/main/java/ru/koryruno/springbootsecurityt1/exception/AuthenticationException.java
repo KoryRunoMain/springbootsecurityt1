@@ -1,0 +1,11 @@
+package ru.koryruno.springbootsecurityt1.exception;
+
+public class AuthenticationException extends RuntimeException {
+
+    public AuthenticationException() {}
+
+    public AuthenticationException(String message) {
+        super(message);
+    }
+
+}

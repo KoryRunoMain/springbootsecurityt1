@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+//    @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public User getUserByUsername(@RequestParam String username) {
         return userService.getUserByUsername(username);

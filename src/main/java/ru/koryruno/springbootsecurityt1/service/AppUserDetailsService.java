@@ -1,26 +1,21 @@
 package ru.koryruno.springbootsecurityt1.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ru.koryruno.springbootsecurityt1.exception.NotFoundException;
 import ru.koryruno.springbootsecurityt1.model.AppUserDetails;
-import ru.koryruno.springbootsecurityt1.model.User;
 import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 
-import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class AppUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws NotFoundException {
-        Optional<User> user = userRepository.findByUsername(username);
-        return user.map(AppUserDetails::new)
-                .orElseThrow(() -> new NotFoundException(String.format("User with username: '%s' not found", username)));
+    public AppUserDetails loadUserByUsername(String username) throws NotFoundException {
+        return  userRepository.findByUsername(username).map(AppUserDetails::new).orElseThrow(
+                () -> new NotFoundException(String.format("User with username: '%s' not found", username)));
     }
 }
