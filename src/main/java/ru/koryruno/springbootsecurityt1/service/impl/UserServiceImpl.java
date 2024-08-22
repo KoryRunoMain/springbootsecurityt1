@@ -7,8 +7,12 @@ import ru.koryruno.springbootsecurityt1.exception.NotFoundException;
 import ru.koryruno.springbootsecurityt1.model.User;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
 import ru.koryruno.springbootsecurityt1.model.mapper.UserMapper;
+import ru.koryruno.springbootsecurityt1.model.responseDto.PrivateUserResponse;
+import ru.koryruno.springbootsecurityt1.model.responseDto.PublicUserResponse;
 import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 import ru.koryruno.springbootsecurityt1.service.UserService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,22 +23,27 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public User createUser(CreateUserRequest createUserDto) {
+    public PublicUserResponse createUser(CreateUserRequest createUserDto) {
         User user = userMapper.toUser(createUserDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        return userMapper.toPublicUser(userRepository.save(user));
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format("User with id: '%s' not found", userId)));
+    public PrivateUserResponse getUserById(Long userId) {
+        return userMapper.toPrivateUser(userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: '%s' not found", userId))));
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException(String.format("User with username: '%s' not found", username)));
+    public PublicUserResponse getUserByUsername(String username) {
+        return userMapper.toPublicUser(userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(String.format("User with username: '%s' not found", username))));
+    }
+
+    @Override
+    public List<PrivateUserResponse> getAllUsers() {
+        return userMapper.toPrivateUserList(userRepository.findAll());
     }
 
 }

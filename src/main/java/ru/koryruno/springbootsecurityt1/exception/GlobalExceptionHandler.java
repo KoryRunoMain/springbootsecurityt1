@@ -23,6 +23,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication failed" + e.getMessage());
     }
 
+    @ExceptionHandler(ApplicationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> notFoundExceptionHandle(ApplicationException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Validation creation failed" + e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<String> notFoundExceptionHandle(Exception e) {

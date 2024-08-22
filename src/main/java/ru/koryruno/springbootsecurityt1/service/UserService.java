@@ -2,12 +2,19 @@ package ru.koryruno.springbootsecurityt1.service;
 
 import ru.koryruno.springbootsecurityt1.model.User;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
+import ru.koryruno.springbootsecurityt1.model.responseDto.PrivateUserResponse;
+import ru.koryruno.springbootsecurityt1.model.responseDto.PublicUserResponse;
+
+import java.util.List;
+
 public interface UserService {
 
-    User createUser(CreateUserRequest createUserDto);
+    PublicUserResponse createUser(CreateUserRequest createUserDto);
 
-    User getUserById(Long userId);
+    PrivateUserResponse getUserById(Long userId);
 
-    User getUserByUsername(String username);
+    PublicUserResponse getUserByUsername(String username);
+
+    List<PrivateUserResponse> getAllUsers();
 
 }

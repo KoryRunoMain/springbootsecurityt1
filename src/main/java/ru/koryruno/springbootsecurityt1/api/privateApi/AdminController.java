@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.koryruno.springbootsecurityt1.model.User;
+import ru.koryruno.springbootsecurityt1.model.responseDto.PrivateUserResponse;
 import ru.koryruno.springbootsecurityt1.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/admin")
@@ -21,8 +23,15 @@ public class AdminController {
     @GetMapping(path = "/{userId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable Long userId) {
+    public PrivateUserResponse getUser(@PathVariable Long userId) {
         return userService.getUserById(userId);
+    }
+
+    @GetMapping(path = "/all")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PrivateUserResponse> getAllUsers() {
+        return userService.getAllUsers();
     }
 
 }
