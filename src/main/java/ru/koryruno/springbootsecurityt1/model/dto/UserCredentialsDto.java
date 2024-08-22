@@ -13,5 +13,5 @@ public class UserCredentialsDto {
     private String username;
     private String email;
     private String password;
-//    private List<String> roles;
+    private List<String> roles;
 }

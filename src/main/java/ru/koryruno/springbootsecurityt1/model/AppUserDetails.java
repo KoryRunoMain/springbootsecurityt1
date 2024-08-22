@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public record AppUserDetails(User user) implements UserDetails {
 
@@ -17,9 +16,12 @@ public record AppUserDetails(User user) implements UserDetails {
 //                .toList();
 //    }
 
+    // TODO Добавлен метод
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return Arrays.stream(user.getRoles().split(", "))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .toList();
     }
 
     @Override

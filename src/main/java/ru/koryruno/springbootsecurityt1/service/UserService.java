@@ -14,6 +14,8 @@ import ru.koryruno.springbootsecurityt1.model.mapper.UserMapper;
 import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 import ru.koryruno.springbootsecurityt1.security.JwtTokenService;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,7 +29,8 @@ public class UserService {
 
     public JwtAuthenticationDto signIn(UserCredentialsDto userCredentialsDto) {
         User user = findByCredentials(userCredentialsDto);
-        return jwtTokenService.generateAuthToken(user.getUsername());
+        List<String> roles = Arrays.asList(user.getRoles().split(", ")); // TODO Добавлена строка
+        return jwtTokenService.generateAuthToken(user.getUsername(), roles);
     }
 
     public JwtAuthenticationDto refreshToken(RefreshTokenDto refreshTokenDto) {
