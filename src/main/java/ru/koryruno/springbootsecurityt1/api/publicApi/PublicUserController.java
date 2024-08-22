@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.koryruno.springbootsecurityt1.annotation.Valid;
 import ru.koryruno.springbootsecurityt1.model.User;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
 import ru.koryruno.springbootsecurityt1.service.UserService;
@@ -20,7 +21,7 @@ public class PublicUserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody CreateUserRequest createUserDto) {
+    public User createUser(@Valid @RequestBody CreateUserRequest createUserDto) {
         return userService.createUser(createUserDto);
     }
 
