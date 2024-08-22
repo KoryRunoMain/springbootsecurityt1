@@ -1,4 +1,4 @@
-package ru.koryruno.springbootsecurityt1.api;
+package ru.koryruno.springbootsecurityt1.api.publicApi;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

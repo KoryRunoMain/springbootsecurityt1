@@ -6,15 +6,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.koryruno.springbootsecurityt1.model.dto.JwtAuthenticationDto;
+import ru.koryruno.springbootsecurityt1.model.TokenData;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -31,11 +29,40 @@ public class JwtTokenService {
     @Value("${jwt.token.expired.refresh}")
     private Duration refreshTokenExpiration;
 
-    public JwtAuthenticationDto generateAuthToken(String username, List<String> roles) {
-        JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
+    public TokenData generateAuthToken(String username, List<String> roles) {
+        TokenData jwtDto = new TokenData();
         jwtDto.setToken(generateJwtToken(username, roles));
         jwtDto.setRefreshToken(generateRefreshToken(username));
         return jwtDto;
+    }
+
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
+    }
+
+    public TokenData refreshBaseToken(String username, String refreshToken) {
+        TokenData jwtDto = new TokenData();
+        List<String> roles = getRolesFromToken(refreshToken);
+        jwtDto.setToken(generateJwtToken(username, roles));
+        jwtDto.setRefreshToken(refreshToken);
+        return jwtDto;
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(jwtSecret)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return true;
+        } catch (Exception exception) {
+            log.error("invalid token", exception);
+        }
+        return false;
     }
 
     private String generateJwtToken(String username, List<String> roles) {
@@ -57,41 +84,12 @@ public class JwtTokenService {
                 .compact();
     }
 
-    public JwtAuthenticationDto refreshBaseToken(String username, String refreshToken) {
-        JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
-        List<String> roles = getRolesFromToken(refreshToken); // TODO Добавлена строка
-        jwtDto.setToken(generateJwtToken(username, roles));
-        jwtDto.setRefreshToken(refreshToken);
-        return jwtDto;
-    }
-
-    // TODO Добавлен метод
     private List<String> getRolesFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.get(ROLE_CLAIM, List.class);
+        return (List<String>) claims.get(ROLE_CLAIM, List.class);
     }
 
-    public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser()
-                    .setSigningKey(jwtSecret)
-                    .parseClaimsJws(token)
-                    .getBody();
-            return true;
-        } catch (Exception exception) {
-            log.error("invalid token", exception);
-        }
-        return false;
-    }
 }

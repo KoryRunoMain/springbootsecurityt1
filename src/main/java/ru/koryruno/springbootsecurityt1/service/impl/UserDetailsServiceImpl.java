@@ -1,4 +1,4 @@
-package ru.koryruno.springbootsecurityt1.service;
+package ru.koryruno.springbootsecurityt1.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,7 +9,7 @@ import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -18,4 +18,5 @@ public class AppUserDetailsService implements UserDetailsService {
         return  userRepository.findByUsername(username).map(AppUserDetails::new).orElseThrow(
                 () -> new NotFoundException(String.format("User with username: '%s' not found", username)));
     }
+
 }

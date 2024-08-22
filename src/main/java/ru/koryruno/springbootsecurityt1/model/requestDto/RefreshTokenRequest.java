@@ -1,4 +1,4 @@
-package ru.koryruno.springbootsecurityt1.model.dto;
+package ru.koryruno.springbootsecurityt1.model.requestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtAuthenticationDto {
-    private String token;
+public class RefreshTokenRequest {
     private String refreshToken;
 }

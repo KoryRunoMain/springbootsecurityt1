@@ -1,4 +1,4 @@
-package ru.koryruno.springbootsecurityt1.model.dto;
+package ru.koryruno.springbootsecurityt1.model.requestDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCredentialsDto {
+public class CreateUserRequest {
+
     private String username;
     private String email;
     private String password;
     private List<String> roles;
+
 }

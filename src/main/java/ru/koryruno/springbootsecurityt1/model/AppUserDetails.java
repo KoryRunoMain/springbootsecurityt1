@@ -9,14 +9,6 @@ import java.util.Collection;
 
 public record AppUserDetails(User user) implements UserDetails {
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return Arrays.stream(user.getRoles().split(", "))
-//                .map(SimpleGrantedAuthority::new)
-//                .toList();
-//    }
-
-    // TODO Добавлен метод
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(user.getRoles().split(", "))

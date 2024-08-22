@@ -12,16 +12,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.koryruno.springbootsecurityt1.model.AppUserDetails;
-import ru.koryruno.springbootsecurityt1.service.AppUserDetailsService;
+import ru.koryruno.springbootsecurityt1.service.impl.UserDetailsServiceImpl;
 
 import java.io.IOException;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenService jwtTokenService;
-    private final AppUserDetailsService appUserDetailsService;
+    private final UserDetailsServiceImpl appUserDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -49,4 +48,5 @@ public class JwtFilter extends OncePerRequestFilter {
                 appUserDetails, null, appUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
+
 }
