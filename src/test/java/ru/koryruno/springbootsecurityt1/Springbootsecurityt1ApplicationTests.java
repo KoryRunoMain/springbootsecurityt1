@@ -5,9 +5,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class Springbootsecurityt1ApplicationTests {
-//
-//	@Test
-//	void contextLoads() {
-//	}
 
 }

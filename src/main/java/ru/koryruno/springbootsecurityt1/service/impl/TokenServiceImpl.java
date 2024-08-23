@@ -1,5 +1,6 @@
 package ru.koryruno.springbootsecurityt1.service.impl;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,13 @@ import ru.koryruno.springbootsecurityt1.model.responseDto.TokenResponse;
 import ru.koryruno.springbootsecurityt1.model.requestDto.UserCredentialsRequest;
 import ru.koryruno.springbootsecurityt1.model.mapper.TokenMapper;
 import ru.koryruno.springbootsecurityt1.repository.UserRepository;
-import ru.koryruno.springbootsecurityt1.security.JwtTokenService;
+import ru.koryruno.springbootsecurityt1.service.JwtTokenService;
 import ru.koryruno.springbootsecurityt1.service.TokenService;
 
 import java.util.List;
 import java.util.Optional;
 
+@Data
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {

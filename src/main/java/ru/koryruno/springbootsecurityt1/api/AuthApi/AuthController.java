@@ -1,6 +1,8 @@
 package ru.koryruno.springbootsecurityt1.api.AuthApi;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,12 +22,12 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/password")
-    public ResponseEntity<TokenResponse> signIn(@RequestBody UserCredentialsRequest userCredentialsDto) {
+    public ResponseEntity<String> signIn(@RequestBody UserCredentialsRequest userCredentialsDto) {
         try {
             TokenResponse jwtAuthenticationDto = tokenService.signIn(userCredentialsDto);
-            return ResponseEntity.ok(jwtAuthenticationDto);
+            return ResponseEntity.ok("Success");
         } catch (AuthException e) {
-            throw new AuthException("Authentication failed" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
         }
     }
 

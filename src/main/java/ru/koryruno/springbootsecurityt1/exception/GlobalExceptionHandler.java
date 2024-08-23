@@ -16,9 +16,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<String> notFoundExceptionHandle(AuthException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication failed" + e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed" + e.getMessage());
     }
 
     @ExceptionHandler(ApplicationException.class)

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.koryruno.springbootsecurityt1.model.AppUserDetails;
+import ru.koryruno.springbootsecurityt1.service.JwtTokenService;
 import ru.koryruno.springbootsecurityt1.service.impl.UserDetailsServiceImpl;
 
 import java.io.IOException;
@@ -19,6 +20,9 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
+    private static final String BEARER_PREFIX = "Bearer ";
+
     private final JwtTokenService jwtTokenService;
     private final UserDetailsServiceImpl appUserDetailsService;
 
@@ -35,8 +39,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
     }

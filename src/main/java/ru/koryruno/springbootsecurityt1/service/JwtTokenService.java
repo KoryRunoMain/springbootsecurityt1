@@ -1,4 +1,4 @@
-package ru.koryruno.springbootsecurityt1.security;
+package ru.koryruno.springbootsecurityt1.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -59,8 +59,8 @@ public class JwtTokenService {
                     .parseClaimsJws(token)
                     .getBody();
             return true;
-        } catch (Exception exception) {
-            log.error("invalid token", exception);
+        } catch (Exception e) {
+            log.error("invalid token", e);
         }
         return false;
     }
