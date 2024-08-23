@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.naming.AuthenticationException;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -17,9 +15,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found" + e.getMessage());
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler(AuthException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<String> notFoundExceptionHandle(AuthenticationException e) {
+    public ResponseEntity<String> notFoundExceptionHandle(AuthException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Authentication failed" + e.getMessage());
     }
 

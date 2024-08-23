@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.koryruno.springbootsecurityt1.exception.NotFoundException;
+import ru.koryruno.springbootsecurityt1.model.RoleType;
 import ru.koryruno.springbootsecurityt1.model.User;
+import ru.koryruno.springbootsecurityt1.model.UserRole;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
 import ru.koryruno.springbootsecurityt1.model.mapper.UserMapper;
 import ru.koryruno.springbootsecurityt1.model.responseDto.PrivateUserResponse;
 import ru.koryruno.springbootsecurityt1.model.responseDto.PublicUserResponse;
 import ru.koryruno.springbootsecurityt1.repository.UserRepository;
+import ru.koryruno.springbootsecurityt1.repository.UserRoleRepository;
 import ru.koryruno.springbootsecurityt1.service.UserService;
 
 import java.util.List;
@@ -19,12 +22,19 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
     @Override
     public PublicUserResponse createUser(CreateUserRequest createUserDto) {
         User user = userMapper.toUser(createUserDto);
+        List<UserRole> userRoles = createUserDto.getRoles().stream()
+                .map(roleName -> roleRepository.findByRoleName(roleName)
+                        .orElseGet(() -> roleRepository.save(new UserRole(null, roleName))))
+                .toList();
+
+        user.setRoles(userRoles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.toPublicUser(userRepository.save(user));
     }

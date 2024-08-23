@@ -1,6 +1,5 @@
 package ru.koryruno.springbootsecurityt1.service;
 
-import ru.koryruno.springbootsecurityt1.model.User;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
 import ru.koryruno.springbootsecurityt1.model.responseDto.PrivateUserResponse;
 import ru.koryruno.springbootsecurityt1.model.responseDto.PublicUserResponse;

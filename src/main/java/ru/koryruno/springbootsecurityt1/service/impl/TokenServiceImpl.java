@@ -3,9 +3,10 @@ package ru.koryruno.springbootsecurityt1.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.koryruno.springbootsecurityt1.exception.AuthenticationException;
+import ru.koryruno.springbootsecurityt1.exception.AuthException;
 import ru.koryruno.springbootsecurityt1.exception.NotFoundException;
 import ru.koryruno.springbootsecurityt1.model.User;
+import ru.koryruno.springbootsecurityt1.model.UserRole;
 import ru.koryruno.springbootsecurityt1.model.requestDto.RefreshTokenRequest;
 import ru.koryruno.springbootsecurityt1.model.responseDto.TokenResponse;
 import ru.koryruno.springbootsecurityt1.model.requestDto.UserCredentialsRequest;
@@ -14,7 +15,6 @@ import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 import ru.koryruno.springbootsecurityt1.security.JwtTokenService;
 import ru.koryruno.springbootsecurityt1.service.TokenService;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +30,9 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public TokenResponse signIn(UserCredentialsRequest userCredentialsDto) {
         User user = findByCredentials(userCredentialsDto);
-        List<String> roles = Arrays.asList(user.getRoles().split(", "));
+        List<String> roles = user.getRoles().stream()
+                .map(UserRole::getRoleName)
+                .toList();
         return tokenMapper.toTokenResponse(jwtTokenService.generateAuthToken(user.getUsername(), roles));
     }
 
@@ -43,10 +45,10 @@ public class TokenServiceImpl implements TokenService {
 
             return tokenMapper.toTokenResponse(jwtTokenService.refreshBaseToken(user.getUsername(), refreshToken));
         }
-        throw new AuthenticationException("Invalid refresh token");
+        throw new AuthException("Invalid refresh token");
     }
 
-    private User findByCredentials(UserCredentialsRequest userCredentialsDto) throws AuthenticationException {
+    private User findByCredentials(UserCredentialsRequest userCredentialsDto) throws AuthException {
         Optional<User> optionalUser = userRepository.findByUsername(userCredentialsDto.getUsername());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -54,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
                 return user;
             }
         }
-        throw new AuthenticationException("Username or password not correct");
+        throw new AuthException("Username or password not correct");
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.koryruno.springbootsecurityt1.exception.AuthenticationException;
+import ru.koryruno.springbootsecurityt1.exception.AuthException;
 import ru.koryruno.springbootsecurityt1.model.requestDto.RefreshTokenRequest;
 import ru.koryruno.springbootsecurityt1.model.responseDto.TokenResponse;
 import ru.koryruno.springbootsecurityt1.model.requestDto.UserCredentialsRequest;
@@ -16,6 +16,7 @@ import ru.koryruno.springbootsecurityt1.service.TokenService;
 @RequestMapping(path = "/api/v1/public/token")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final TokenService tokenService;
 
     @PostMapping("/password")
@@ -23,8 +24,8 @@ public class AuthController {
         try {
             TokenResponse jwtAuthenticationDto = tokenService.signIn(userCredentialsDto);
             return ResponseEntity.ok(jwtAuthenticationDto);
-        } catch (AuthenticationException e) {
-            throw new AuthenticationException("Authentication failed" + e.getMessage());
+        } catch (AuthException e) {
+            throw new AuthException("Authentication failed" + e.getMessage());
         }
     }
 

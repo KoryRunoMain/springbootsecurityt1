@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import ru.koryruno.springbootsecurityt1.exception.ApplicationException;
+import ru.koryruno.springbootsecurityt1.model.RoleType;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
 
 import java.util.regex.Pattern;
@@ -41,6 +42,11 @@ public class ValidationAspect {
         }
         if (user.getEmail() == null || !EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
             throw new ApplicationException("Invalid email format");
+        }
+        for (String userRequestRoleType : user.getRoles()) {
+            if (RoleType.from(userRequestRoleType).isEmpty()) {
+                throw new ApplicationException("Invalid user role");
+            }
         }
     }
 
