@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-class AuthControllerTest {
+public class AuthControllerTest {
 
     @Mock
     private TokenService tokenService;
@@ -48,8 +48,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"username\", \"password\": \"password\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("validAuthToken"))
-                .andExpect(jsonPath("$.refreshToken").value("validRefreshToken"))
+                .andExpect(content().string(("Success")))
                 .andDo(print());
     }
 

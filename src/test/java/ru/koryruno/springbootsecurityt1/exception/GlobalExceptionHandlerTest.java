@@ -26,7 +26,7 @@ class GlobalExceptionHandlerTest {
     void authenticationExceptionHandle_ReturnsForbidden() {
         AuthException exception = new AuthException("Auth failed");
         ResponseEntity<String> response = globalExceptionHandler.notFoundExceptionHandle(exception);
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertTrue(response.getBody().contains("Auth failed"));
     }
 

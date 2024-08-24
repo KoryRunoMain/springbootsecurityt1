@@ -71,7 +71,7 @@ public class JwtTokenService {
                 .setSubject(username)
                 .claim(ROLE_CLAIM, roles)
                 .setExpiration(date)
-                .signWith(SignatureAlgorithm.ES512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
@@ -80,7 +80,7 @@ public class JwtTokenService {
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(date)
-                .signWith(SignatureAlgorithm.ES512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 

@@ -39,7 +39,7 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void getUser_Success() throws Exception {
-        PrivateUserResponse userResponse = new PrivateUserResponse(1L, "username",  List.of("ROLE_USER"));
+        PrivateUserResponse userResponse = new PrivateUserResponse(1L, "username", List.of("ROLE_USER"));
 
         when(userService.getUserById(1L)).thenReturn(userResponse);
 
@@ -47,7 +47,7 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.username").value("username"))
-                .andExpect(jsonPath("$.role").value("ROLE_USER"))
+                .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"))
                 .andDo(print());
     }
 
@@ -62,7 +62,7 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].username").value("username"))
-                .andExpect(jsonPath("$[0].role").value("ROLE_USER"))
+                .andExpect(jsonPath("$[0].roles[0]").value("ROLE_USER"))
                 .andDo(print());
     }
 
