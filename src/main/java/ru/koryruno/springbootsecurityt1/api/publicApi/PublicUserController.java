@@ -1,5 +1,6 @@
 package ru.koryruno.springbootsecurityt1.api.publicApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import ru.koryruno.springbootsecurityt1.service.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/public/user")
+@Tag(name = "Public User Creation")
 public class PublicUserController {
 
     private final UserService userService;

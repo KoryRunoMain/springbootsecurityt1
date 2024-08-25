@@ -1,5 +1,6 @@
 package ru.koryruno.springbootsecurityt1.api.publicApi;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import ru.koryruno.springbootsecurityt1.service.UserService;
 @RestController
 @RequestMapping(path = "/user")
 @RequiredArgsConstructor
+@Tag(name = "Public")
 public class UserController {
 
     private final UserService userService;

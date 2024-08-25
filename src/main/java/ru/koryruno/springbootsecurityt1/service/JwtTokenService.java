@@ -65,7 +65,7 @@ public class JwtTokenService {
         return false;
     }
 
-    private String generateJwtToken(String username, List<String> roles) {
+    public String generateJwtToken(String username, List<String> roles) {
         Date date = Date.from(LocalDateTime.now().plus(tokenExpiration).atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setSubject(username)
