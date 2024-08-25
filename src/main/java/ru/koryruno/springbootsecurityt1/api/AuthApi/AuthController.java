@@ -30,10 +30,7 @@ public class AuthController {
     public ResponseEntity<String> signIn(@RequestBody UserCredentialsRequest userCredentialsDto) {
         try {
             TokenResponse jwtAuthenticationDto = tokenService.signIn(userCredentialsDto);
-            log.info("Success tokens: " +
-                    jwtAuthenticationDto.getToken() + " refreshToken: " +
-                    jwtAuthenticationDto.getRefreshToken());
-            return ResponseEntity.ok("Success tokens: " +
+            return ResponseEntity.ok("Success. authToken: " +
                     jwtAuthenticationDto.getToken() + " refreshToken: " +
                     jwtAuthenticationDto.getRefreshToken());
         } catch (AuthException e) {

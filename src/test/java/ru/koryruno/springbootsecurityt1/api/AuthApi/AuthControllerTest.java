@@ -48,7 +48,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\": \"username\", \"password\": \"password\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(("Success")))
+                .andExpect(content().string(("Success. authToken: validAuthToken refreshToken: validRefreshToken")))
                 .andDo(print());
     }
 
