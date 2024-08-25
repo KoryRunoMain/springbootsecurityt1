@@ -24,25 +24,24 @@ class SecurityConfigTest {
 
     @MockBean
     private JwtFilter jwtFilter;
-
     @MockBean
     private UserDetailsServiceImpl userDetailsService;
 
     @Test
-    void securityFilterChain_BeanCreation_Success() throws Exception {
+    public void When_SecurityFilterChain_BeanCreation_Expect_Successfully() throws Exception {
         HttpSecurity http = Mockito.mock(HttpSecurity.class);
         assertNotNull(securityConfig.securityFilterChain(http));
     }
 
     @Test
-    void passwordEncoder_CreatesEncoder_Success() {
+    public void When_PasswordEncoder_CreatesEncoder_Expect_Successfully() {
         PasswordEncoder passwordEncoder = securityConfig.passwordEncoder();
         assertNotNull(passwordEncoder);
         assertInstanceOf(BCryptPasswordEncoder.class, passwordEncoder);
     }
 
     @Test
-    void authenticationManager_BeanCreation_Success() throws Exception {
+    public void When_AuthenticationManager_BeanCreation_Expect_Successfully() throws Exception {
         AuthenticationConfiguration config = Mockito.mock(AuthenticationConfiguration.class);
         Mockito.when(config.getAuthenticationManager()).thenReturn(Mockito.mock(AuthenticationManager.class));
         assertNotNull(securityConfig.authenticationManager(config));

@@ -17,11 +17,15 @@ import static org.mockito.Mockito.when;
 
 class UserDetailsServiceImplTest {
 
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks
     private UserDetailsServiceImpl userDetailsService;
 
-    @Mock
-    private UserRepository userRepository;
+    // Init
+    private static final String USERNAME = "username";
+    private static final String NOT_EXISTING_USERNAME = "notExistingUsername";
 
     @BeforeEach
     void setUp() {
@@ -29,24 +33,22 @@ class UserDetailsServiceImplTest {
     }
 
     @Test
-    void loadUserByUsername_Success() {
-        String username = "username";
+    public void When_LoadUserByUsername_With_ExistingUsername_Expect_Successfully() {
         User user = new User();
-        user.setUsername(username);
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        user.setUsername(USERNAME);
+        when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
 
-        AppUserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        AppUserDetails userDetails = userDetailsService.loadUserByUsername(USERNAME);
 
         assertNotNull(userDetails);
-        assertEquals(username, userDetails.getUsername());
+        assertEquals(USERNAME, userDetails.getUsername());
     }
 
     @Test
-    void loadUserByUsername_Failure_UserNotFound() {
-        String username = "nonExistentUser";
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+    public void When_LoadUserByUsername_With_NotExistingUsername_Expect_NotFound() {
+        when(userRepository.findByUsername(NOT_EXISTING_USERNAME)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userDetailsService.loadUserByUsername(username));
+        assertThrows(NotFoundException.class, () -> userDetailsService.loadUserByUsername(NOT_EXISTING_USERNAME));
     }
 
 }

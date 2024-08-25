@@ -1,6 +1,5 @@
 package ru.koryruno.springbootsecurityt1.api.privateApi;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,21 +16,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/admin")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequiredArgsConstructor
 @Tag(name = "Admin")
 public class AdminController {
-
     private final UserService userService;
 
     @GetMapping(path = "/{userId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public PrivateUserResponse getUser(@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
 
     @GetMapping(path = "/all")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     public List<PrivateUserResponse> getAllUsers() {
         return userService.getAllUsers();

@@ -38,28 +38,29 @@ class TokenServiceImplTest {
     @InjectMocks
     private TokenServiceImpl tokenService;
 
+    // Init
+    private final Long USER_ID = 1L;
+    private final UserCredentialsRequest request = new UserCredentialsRequest("username", "password");
+    private final UserCredentialsRequest wrongRequest = new UserCredentialsRequest("username", "wrongPassword");
+    private final RefreshTokenRequest invalidTokenRequest = new RefreshTokenRequest("invalidToken");
+
+    private final User user = User.builder()
+            .username("username")
+            .password("encodedPassword")
+            .roles(List.of(new UserRole(USER_ID, "ROLE_USER")))
+            .build();
+    private final TokenData tokenData = new TokenData("validAuthToken", "validRefreshToken");
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void signIn_Success() {
-        UserCredentialsRequest request = new UserCredentialsRequest("username", "password");
-        User user = new User();
-        user.setUsername("username");
-        user.setPassword("encodedPassword");
-        user.setRoles(List.of(new UserRole(1L, "ROLE_USER")));
-
+    public void When_SignIn_Expect_Successfully() {
         when(userRepository.findByUsername(request.getUsername())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(request.getPassword(), user.getPassword())).thenReturn(true);
 
-        // Создаем объект TokenData
-        TokenData tokenData = new TokenData();
-        tokenData.setToken("validAuthToken");
-        tokenData.setRefreshToken("validRefreshToken");
-
-        // Мокаем методы
         when(jwtTokenService.generateAuthToken(user.getUsername(), List.of("ROLE_USER"))).thenReturn(tokenData);
         when(tokenMapper.toTokenResponse(tokenData)).thenReturn(new TokenResponse("validAuthToken", "validRefreshToken"));
 
@@ -71,7 +72,7 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void refreshToken_Success() {
+    public void When_RefreshToken_Expect_Successfully() {
         String refreshToken = "validRefreshToken";
         RefreshTokenRequest request = new RefreshTokenRequest(refreshToken);
         User user = new User();
@@ -81,7 +82,6 @@ class TokenServiceImplTest {
         when(jwtTokenService.getUsernameFromToken(refreshToken)).thenReturn("username");
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
 
-        // Создаем новый объект TokenData для обновленного токена
         TokenData tokenData = new TokenData();
         tokenData.setToken("newAuthToken");
         tokenData.setRefreshToken(refreshToken);
@@ -97,20 +97,18 @@ class TokenServiceImplTest {
     }
 
     @Test
-    void signIn_Failure_InvalidCredentials() {
-        UserCredentialsRequest request = new UserCredentialsRequest("username", "wrongPassword");
-        when(userRepository.findByUsername(request.getUsername())).thenReturn(Optional.of(new User()));
-        when(passwordEncoder.matches(request.getPassword(), "userPassword")).thenReturn(false);
+    public void When_SignIn_With_InvalidCredentials_Expect_ThrowsException() {
+        when(userRepository.findByUsername(wrongRequest.getUsername())).thenReturn(Optional.of(new User()));
+        when(passwordEncoder.matches(wrongRequest.getPassword(), "userPassword")).thenReturn(false);
 
-        assertThrows(AuthException.class, () -> tokenService.signIn(request));
+        assertThrows(AuthException.class, () -> tokenService.signIn(wrongRequest));
     }
 
     @Test
-    void refreshToken_Failure_InvalidToken() {
-        RefreshTokenRequest request = new RefreshTokenRequest("invalidToken");
-
+    public void When_RefreshToken_With_InvalidToken_Expect_ThrowsException() {
         when(jwtTokenService.validateToken(any())).thenReturn(false);
 
-        assertThrows(AuthException.class, () -> tokenService.refreshToken(request));
+        assertThrows(AuthException.class, () -> tokenService.refreshToken(invalidTokenRequest));
     }
+
 }

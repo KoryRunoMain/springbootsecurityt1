@@ -23,7 +23,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
-
     private final UserRepository userRepository;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;

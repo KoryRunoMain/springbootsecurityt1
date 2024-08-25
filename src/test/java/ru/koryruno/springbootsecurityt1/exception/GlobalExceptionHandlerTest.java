@@ -15,7 +15,7 @@ class GlobalExceptionHandlerTest {
     private GlobalExceptionHandler globalExceptionHandler;
 
     @Test
-    void notFoundExceptionHandle_ReturnsNotFound() {
+    public void When_NotFoundExceptionHandle_Expect_NotFound() {
         NotFoundException exception = new NotFoundException("User not found");
         ResponseEntity<String> response = globalExceptionHandler.notFoundExceptionHandle(exception);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -23,7 +23,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void authenticationExceptionHandle_ReturnsForbidden() {
+    public void When_AuthenticationExceptionHandle_Expect_Forbidden() {
         AuthException exception = new AuthException("Auth failed");
         ResponseEntity<String> response = globalExceptionHandler.notFoundExceptionHandle(exception);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
@@ -31,7 +31,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void applicationExceptionHandle_ReturnsConflict() {
+    public void When_ApplicationExceptionHandle_Expect_Conflict() {
         ApplicationException exception = new ApplicationException("Validation failed");
         ResponseEntity<String> response = globalExceptionHandler.notFoundExceptionHandle(exception);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
@@ -39,7 +39,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void genericExceptionHandle_ReturnsInternalServerError() {
+    public void When_GenericExceptionHandle_Expect_InternalServerError() {
         Exception exception = new Exception("Unexpected error");
         ResponseEntity<String> response = globalExceptionHandler.notFoundExceptionHandle(exception);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());

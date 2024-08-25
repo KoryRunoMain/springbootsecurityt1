@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 @Slf4j
 @Order(1)
 public class ValidationAspect {
-
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Za-z0-9]+$");
 

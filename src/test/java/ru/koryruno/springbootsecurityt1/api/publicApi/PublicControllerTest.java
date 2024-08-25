@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -27,7 +26,7 @@ class PublicControllerTest {
     }
 
     @Test
-    void startPage_Success() throws Exception {
+    public void When_StartPage_Expect_Successfully() throws Exception {
         String expectedContent = "This is a simple web service for user registration with security JWT authentication.";
 
         mockMvc.perform(get("/info"))

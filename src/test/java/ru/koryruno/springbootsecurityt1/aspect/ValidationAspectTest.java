@@ -18,12 +18,11 @@ class ValidationAspectTest {
 
     @Mock
     private CreateUserRequest user;
-
     @InjectMocks
     private ValidationAspect validationAspect;
 
     @Test
-    void validateUser_ValidUser_NoExceptionThrown() {
+    public void When_ValidateUser_With_ValidFields_Expect_Successfully() {
         Mockito.when(user.getUsername()).thenReturn("validUser");
         Mockito.when(user.getEmail()).thenReturn("valid.email@example.com");
 
@@ -31,7 +30,7 @@ class ValidationAspectTest {
     }
 
     @Test
-    void validateUser_InvalidUsername_ThrowsException() {
+    public void When_ValidateUser_With_InvalidUsername_Expect_ThrowsException() {
         Mockito.when(user.getUsername()).thenReturn("invalid user");
 
         ApplicationException exception = assertThrows(ApplicationException.class,
@@ -40,7 +39,7 @@ class ValidationAspectTest {
     }
 
     @Test
-    void validateUser_InvalidEmail_ThrowsException() {
+    public void When_ValidateUser_With_InvalidEmail_Expect_ThrowsException() {
         Mockito.when(user.getUsername()).thenReturn("validUser");
         Mockito.when(user.getEmail()).thenReturn("invalid-email");
 

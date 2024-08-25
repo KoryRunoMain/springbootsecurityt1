@@ -24,11 +24,15 @@ class AdminControllerTest {
 
     @Mock
     private UserService userService;
-
     @InjectMocks
     private AdminController adminController;
 
     private MockMvc mockMvc;
+
+    // Init
+    private static final Long USER_ID = 1L;
+    private final PrivateUserResponse userResponse = new PrivateUserResponse(1L, "username",
+            List.of("ROLE_USER"));
 
     @BeforeEach
     void setUp() {
@@ -38,14 +42,12 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void getUser_Success() throws Exception {
-        PrivateUserResponse userResponse = new PrivateUserResponse(1L, "username", List.of("ROLE_USER"));
-
-        when(userService.getUserById(1L)).thenReturn(userResponse);
+    public void When_GetUser_Expect_Successfully() throws Exception {
+        when(userService.getUserById(USER_ID)).thenReturn(userResponse);
 
         mockMvc.perform(get("/admin/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(USER_ID))
                 .andExpect(jsonPath("$.username").value("username"))
                 .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"))
                 .andDo(print());
@@ -53,14 +55,12 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void getAllUsers_Success() throws Exception {
-        PrivateUserResponse userResponse = new PrivateUserResponse(1L, "username", List.of("ROLE_USER"));
-
+    public void When_GetAllUsers_Expect_Successfully() throws Exception {
         when(userService.getAllUsers()).thenReturn(Collections.singletonList(userResponse));
 
         mockMvc.perform(get("/admin/all"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].id").value(USER_ID))
                 .andExpect(jsonPath("$[0].username").value("username"))
                 .andExpect(jsonPath("$[0].roles[0]").value("ROLE_USER"))
                 .andDo(print());

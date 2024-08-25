@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.koryruno.springbootsecurityt1.exception.NotFoundException;
-import ru.koryruno.springbootsecurityt1.model.RoleType;
 import ru.koryruno.springbootsecurityt1.model.User;
 import ru.koryruno.springbootsecurityt1.model.UserRole;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
@@ -20,7 +19,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
     private final UserRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;

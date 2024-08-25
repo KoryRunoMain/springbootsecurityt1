@@ -21,11 +21,12 @@ class UserControllerTest {
 
     @Mock
     private UserService userService;
-
     @InjectMocks
     private UserController userController;
 
     private MockMvc mockMvc;
+
+    private final PublicUserResponse userResponse = new PublicUserResponse("username");
 
     @BeforeEach
     void setUp() {
@@ -35,9 +36,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    void getUserByUsername_Success() throws Exception {
-        PublicUserResponse userResponse = new PublicUserResponse("username");
-
+    public void When_GetUserByUsername_Expect_Successfully() throws Exception {
         when(userService.getUserByUsername("username")).thenReturn(userResponse);
 
         mockMvc.perform(get("/user").param("username", "username"))

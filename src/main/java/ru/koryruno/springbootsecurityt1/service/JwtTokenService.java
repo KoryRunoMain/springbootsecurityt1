@@ -1,12 +1,8 @@
 package ru.koryruno.springbootsecurityt1.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +17,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class JwtTokenService {
-
     private static final String ROLE_CLAIM = "roles";
 
     @Value("${jwt.secret}")

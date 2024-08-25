@@ -18,7 +18,6 @@ import ru.koryruno.springbootsecurityt1.service.UserService;
 @RequestMapping(path = "/api/v1/public/user")
 @Tag(name = "Public User Creation")
 public class PublicUserController {
-
     private final UserService userService;
 
     @PostMapping

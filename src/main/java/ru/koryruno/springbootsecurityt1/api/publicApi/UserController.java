@@ -14,14 +14,13 @@ import ru.koryruno.springbootsecurityt1.service.UserService;
 
 @RestController
 @RequestMapping(path = "/user")
+@PreAuthorize("hasAuthority('ROLE_USER')")
 @RequiredArgsConstructor
 @Tag(name = "Public")
 public class UserController {
-
     private final UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public PublicUserResponse getUserByUsername(@RequestParam String username) {
         return userService.getUserByUsername(username);

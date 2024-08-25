@@ -25,11 +25,15 @@ public class AuthControllerTest {
 
     @Mock
     private TokenService tokenService;
-
     @InjectMocks
     private AuthController authController;
 
     private MockMvc mockMvc;
+
+    // Init objects for tests
+    private final UserCredentialsRequest credentialsRequest = new UserCredentialsRequest("username", "password");
+    private final TokenResponse tokenResponse = new TokenResponse("validAuthToken", "validRefreshToken");
+    private final RefreshTokenRequest refreshRequest = new RefreshTokenRequest("validRefreshToken");
 
     @BeforeEach
     void setUp() {
@@ -38,11 +42,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    void signIn_Success() throws Exception {
-        UserCredentialsRequest request = new UserCredentialsRequest("username", "password");
-        TokenResponse tokenResponse = new TokenResponse("validAuthToken", "validRefreshToken");
-
-        when(tokenService.signIn(request)).thenReturn(tokenResponse);
+    public void When_SignIn_Expect_Successfully() throws Exception {
+        when(tokenService.signIn(credentialsRequest)).thenReturn(tokenResponse);
 
         mockMvc.perform(post("/api/v1/public/token/password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,10 +54,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    void signIn_Failure_InvalidCredentials() throws Exception {
-        UserCredentialsRequest request = new UserCredentialsRequest("username", "password");
-
-        when(tokenService.signIn(request)).thenThrow(new AuthException("Authentication failed"));
+    public void When_SignIn_With_InvalidCredentials_Expect_AuthenticationFailed() throws Exception {
+        when(tokenService.signIn(credentialsRequest)).thenThrow(new AuthException("Authentication failed"));
 
         mockMvc.perform(post("/api/v1/public/token/password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,11 +66,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    void refresh_Success() throws Exception {
-        RefreshTokenRequest request = new RefreshTokenRequest("validRefreshToken");
-        TokenResponse tokenResponse = new TokenResponse("newAuthToken", "validRefreshToken");
-
-        when(tokenService.refreshToken(request)).thenReturn(tokenResponse);
+    public void When_RefreshToken_Expect_Successfully() throws Exception {
+        when(tokenService.refreshToken(refreshRequest)).thenReturn(tokenResponse);
 
         mockMvc.perform(post("/api/v1/public/token/refresh")
                         .contentType(MediaType.APPLICATION_JSON)

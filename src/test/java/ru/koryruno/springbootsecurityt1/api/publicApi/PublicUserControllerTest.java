@@ -24,11 +24,15 @@ class PublicUserControllerTest {
 
     @Mock
     private UserService userService;
-
     @InjectMocks
     private PublicUserController publicUserController;
 
     private MockMvc mockMvc;
+
+    // Init
+    private final CreateUserRequest request = new CreateUserRequest(
+            "username", "username@username.user", "password", List.of("ROLE_USER"));
+    private final PublicUserResponse userResponse = new PublicUserResponse("username");
 
     @BeforeEach
     void setUp() {
@@ -37,10 +41,7 @@ class PublicUserControllerTest {
     }
 
     @Test
-    void createUser_Success() throws Exception {
-        CreateUserRequest request = new CreateUserRequest("username", "username@username.user", "password", List.of("ROLE_USER"));
-        PublicUserResponse userResponse = new PublicUserResponse("username");
-
+    public void When_CreateUser_Expect_Successfully() throws Exception {
         when(userService.createUser(request)).thenReturn(userResponse);
 
         mockMvc.perform(post("/api/v1/public/user")

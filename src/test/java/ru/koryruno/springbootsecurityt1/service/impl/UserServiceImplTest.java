@@ -36,83 +36,92 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    // Init
+    private static final Long USER_ID = 1L;
+    private static final String USER_NAME = "username";
+    private static final String PASSWORD = "encodedPassword";
+    private static final String ENCODED_PASSWORD = "encodedPassword";
+    private static final UserRole USER_ROLE_ENTITY = new UserRole(1L, "ROLE_USER");
+    private static final List<String> USER_ROLES = List.of("ROLE_USER");
+    private static final String NOT_EXISTING_USERNAME = "nonExistingUser";
+
+    private final CreateUserRequest validRequest = new CreateUserRequest("username",
+            "username@username.user", PASSWORD, USER_ROLES);
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void createUser_Success() {
-        CreateUserRequest request = new CreateUserRequest(
-                "username",
-                "username@username.user", "password", List.of("ROLE_USER"));
+    public void When_CreateUser_Expect_Successfully() {
         User user = new User();
-        user.setUsername("username");
-        user.setPassword("encodedPassword");
+        user.setUsername(USER_NAME);
+        user.setPassword(ENCODED_PASSWORD);
 
-        when(userMapper.toUser(request)).thenReturn(user);
-        when(roleRepository.findByRoleName("ROLE_USER")).thenReturn(Optional.of(new UserRole(1L, "ROLE_USER")));
-        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
+        when(userMapper.toUser(validRequest)).thenReturn(user);
+        when(roleRepository.findByRoleName("ROLE_USER")).thenReturn(Optional.of(USER_ROLE_ENTITY));
+        when(passwordEncoder.encode(PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(userRepository.save(user)).thenReturn(user);
-        when(userMapper.toPublicUser(user)).thenReturn(new PublicUserResponse("username"));
+        when(userMapper.toPublicUser(user)).thenReturn(new PublicUserResponse(USER_NAME));
 
-        PublicUserResponse response = userService.createUser(request);
+        PublicUserResponse response = userService.createUser(validRequest);
 
         assertNotNull(response);
-        assertEquals("username", response.getUsername());
+        assertEquals(USER_NAME, response.getUsername());
     }
 
     @Test
-    void getUserById_Success() {
-        Long userId = 1L;
+    public void When_GetUserById_Expect_Successfully() {
         User user = new User();
-        user.setId(userId);
+        user.setId(USER_ID);
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(userMapper.toPrivateUser(user)).thenReturn(new PrivateUserResponse(1L, "username", List.of("ROLE_USER")));
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(userMapper.toPrivateUser(user)).thenReturn(
+                new PrivateUserResponse(USER_ID, USER_NAME, USER_ROLES));
 
-        PrivateUserResponse response = userService.getUserById(userId);
+        PrivateUserResponse response = userService.getUserById(USER_ID);
 
         assertNotNull(response);
-        assertEquals(userId, response.getId());
+        assertEquals(USER_ID, response.getId());
     }
 
     @Test
-    void getUserById_Failure_UserNotFound() {
-        Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+    public void When_GetUserById_With_NotExistingId_Expect_NotFound() {
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userService.getUserById(userId));
+        assertThrows(NotFoundException.class, () -> userService.getUserById(USER_ID));
     }
 
     @Test
-    void getUserByUsername_Success() {
-        String username = "username";
+    public void When_GetUserByUsername_Expect_Successfully() {
         User user = new User();
-        user.setUsername(username);
+        user.setUsername(USER_NAME);
 
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        when(userMapper.toPublicUser(user)).thenReturn(new PublicUserResponse(username));
+        when(userRepository.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
+        when(userMapper.toPublicUser(user)).thenReturn(new PublicUserResponse(USER_NAME));
 
-        PublicUserResponse response = userService.getUserByUsername(username);
+        PublicUserResponse response = userService.getUserByUsername(USER_NAME);
 
         assertNotNull(response);
-        assertEquals(username, response.getUsername());
+        assertEquals(USER_NAME, response.getUsername());
     }
 
     @Test
-    void getUserByUsername_Failure_UserNotFound() {
-        String username = "nonExistentUser";
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+    public void When_GetUserByUsername_With_NotExistingUsername_Expect_NotFound() {
+        when(userRepository.findByUsername(NOT_EXISTING_USERNAME)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userService.getUserByUsername(username));
+        assertThrows(NotFoundException.class, () -> userService.getUserByUsername(NOT_EXISTING_USERNAME));
     }
 
     @Test
-    void getAllUsers_Success() {
+    public void When_GetAllUsers_Expect_Successfully() {
         List<User> users = List.of(new User(), new User());
         when(userRepository.findAll()).thenReturn(users);
-        when(userMapper.toPrivateUserList(users)).thenReturn(List.of(new PrivateUserResponse(1L, "username", List.of("ROLE_USER")), new PrivateUserResponse(2L, "username", List.of("ROLE_USER"))));
+        when(userMapper.toPrivateUserList(users)).thenReturn(List.of(
+                new PrivateUserResponse(USER_ID, USER_NAME, USER_ROLES),
+                new PrivateUserResponse((USER_ID + 1), USER_NAME, USER_ROLES))
+        );
 
         List<PrivateUserResponse> responses = userService.getAllUsers();
 

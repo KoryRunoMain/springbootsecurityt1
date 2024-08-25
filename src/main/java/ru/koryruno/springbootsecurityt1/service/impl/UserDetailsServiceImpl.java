@@ -10,7 +10,6 @@ import ru.koryruno.springbootsecurityt1.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     private final UserRepository userRepository;
 
     @Override
