@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Import;
 import ru.koryruno.springbootsecurityt1.exception.ApplicationException;
 import ru.koryruno.springbootsecurityt1.model.requestDto.CreateUserRequest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 @Import(ValidationAspect.class)

@@ -38,4 +38,5 @@ import io.swagger.v3.oas.annotations.servers.Server;
         bearerFormat = "JWT"
 )
 public class OpenApiConfig {
+
 }
