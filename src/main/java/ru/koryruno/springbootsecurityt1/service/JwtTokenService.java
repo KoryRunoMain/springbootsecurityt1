@@ -1,8 +1,12 @@
 package ru.koryruno.springbootsecurityt1.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -65,7 +69,7 @@ public class JwtTokenService {
         return false;
     }
 
-    private String generateJwtToken(String username, List<String> roles) {
+    public String generateJwtToken(String username, List<String> roles) {
         Date date = Date.from(LocalDateTime.now().plus(tokenExpiration).atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setSubject(username)
@@ -75,7 +79,7 @@ public class JwtTokenService {
                 .compact();
     }
 
-    private String generateRefreshToken(String username) {
+    public String generateRefreshToken(String username) {
         Date date = Date.from(LocalDateTime.now().plus(refreshTokenExpiration).atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setSubject(username)
@@ -91,5 +95,4 @@ public class JwtTokenService {
                 .getBody();
         return (List<String>) claims.get(ROLE_CLAIM, List.class);
     }
-
 }

@@ -1,6 +1,6 @@
 package ru.koryruno.springbootsecurityt1.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import io.jsonwebtoken.JwtParser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.koryruno.springbootsecurityt1.model.TokenData;
 import ru.koryruno.springbootsecurityt1.service.JwtTokenService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,6 +20,7 @@ public class JwtTokenServiceTest {
 
     @Autowired
     private JwtTokenService jwtTokenService;
+
 
     private static final String USER_NAME = "user";
     private final List<String> USER_ROLE = List.of("ROLE_USER");

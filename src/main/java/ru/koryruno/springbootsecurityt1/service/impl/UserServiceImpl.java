@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
                 .map(roleName -> roleRepository.findByRoleName(roleName)
                         .orElseGet(() -> roleRepository.save(new UserRole(null, roleName))))
                 .toList();
-
         user.setRoles(userRoles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userMapper.toPublicUser(userRepository.save(user));
