@@ -30,10 +30,9 @@ public class AuthControllerTest {
 
     private MockMvc mockMvc;
 
-    // Init objects for tests
-    private final UserCredentialsRequest credentialsRequest = new UserCredentialsRequest("username", "password");
-    private final TokenResponse tokenResponse = new TokenResponse("validAuthToken", "validRefreshToken");
-    private final RefreshTokenRequest refreshRequest = new RefreshTokenRequest("validRefreshToken");
+    // Init
+    private static final UserCredentialsRequest CREDENTIALS_REQUEST= new UserCredentialsRequest("username", "password");
+    private static final TokenResponse TOKEN_RESPONSE = new TokenResponse("validAuthToken", "validRefreshToken");
 
     @BeforeEach
     void setUp() {
@@ -43,7 +42,7 @@ public class AuthControllerTest {
 
     @Test
     public void When_SignIn_Expect_Successfully() throws Exception {
-        when(tokenService.signIn(credentialsRequest)).thenReturn(tokenResponse);
+        when(tokenService.signIn(CREDENTIALS_REQUEST)).thenReturn(TOKEN_RESPONSE);
 
         mockMvc.perform(post("/api/v1/public/token/password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,7 +54,7 @@ public class AuthControllerTest {
 
     @Test
     public void When_SignIn_With_InvalidCredentials_Expect_AuthenticationFailed() throws Exception {
-        when(tokenService.signIn(credentialsRequest)).thenThrow(new AuthException("Authentication failed"));
+        when(tokenService.signIn(CREDENTIALS_REQUEST)).thenThrow(new AuthException("Authentication failed"));
 
         mockMvc.perform(post("/api/v1/public/token/password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,7 +66,10 @@ public class AuthControllerTest {
 
     @Test
     public void When_RefreshToken_Expect_Successfully() throws Exception {
-        when(tokenService.refreshToken(refreshRequest)).thenReturn(tokenResponse);
+        RefreshTokenRequest request = new RefreshTokenRequest("validRefreshToken");
+        TokenResponse tokenResponse = new TokenResponse("newAuthToken", "validRefreshToken");
+
+        when(tokenService.refreshToken(request)).thenReturn(tokenResponse);
 
         mockMvc.perform(post("/api/v1/public/token/refresh")
                         .contentType(MediaType.APPLICATION_JSON)
