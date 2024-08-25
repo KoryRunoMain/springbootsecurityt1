@@ -34,8 +34,15 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/info",
                                 "/api/v1/public/**",
+                                "/v2/api-docs",
                                 "/v3/api-docs",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "swagger-resources",
+                                "swagger-resources/**",
+                                "/configuration/security",
+                                "/swagger-ui/**",
+                                "/webjars/**",
+                                "/swagger-ui.html"
                         ).permitAll()
                         .requestMatchers("/**").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
